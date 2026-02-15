@@ -57,4 +57,4 @@ This repository contains a collection of R projects developed to solve practical
 I am open to opportunities in **Pharmaceutical Data Science**, **Clinical Data Analysis**, and **Hospital Data Management**.
 
 * **Location:** Cosenza/Rende, Italy
-* **Role:** Data Analyst / Pharmacist
+* **Role:** Pharma Data Analyst / Healthcare Analytics Engineer
