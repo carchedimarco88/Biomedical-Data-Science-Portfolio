@@ -1,0 +1,136 @@
+---
+title: "01_Spline_Regression_Analysis.R"
+author: "dott. Foca M. Carchedi"
+output: html_notebook
+date: "11-gen-2026"
+---
+
+## Creazione dataset
+
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(splines)
+
+set.seed(2701)
+
+generated <- function(n) {
+  x <- sort(runif(n, 0, 8))
+  eps <- rnorm(n, 0, 0.5)
+  y <- sin(x) + eps
+  tibble(x = x, y = y)
+}
+
+n <- 1000
+xy <- generated(n)
+xy[[2]][[123]]
+```
+
+## Stima dei Modelli con confronto tra ciclo for e funzionale
+
+```{r fit-models, message=FALSE, warning=FALSE}
+fit_spline_with_df <- function(db, df) {
+  lm(y ~ ns(x, df), data = db)
+}
+
+df_of_interest <- 1:40
+
+# Ciclo for
+models_for <- vector("list", length(df_of_interest)) 
+for (i in seq_along(df_of_interest)) {
+  models_for[[i]] <- fit_spline_with_df(xy, i) 
+} 
+names(models_for) <- df_of_interest
+
+# Funzionale
+models_functional <- map(df_of_interest, ~ fit_spline_with_df(db = xy, df = .x))
+names(models_functional) <- df_of_interest
+
+# Verifica equivalenza
+all.equal(models_for, models_functional)
+```
+
+## Estrazione del coefficiente
+
+```{r extract, message=FALSE, warning=FALSE}
+
+risultato <- models_functional[[36]]$coefficients["(Intercept)"]
+print(risultato)
+```
+
+## Visualizzazione
+
+```{r plot, message=FALSE, warning=FALSE}
+splines_predictions <- imap_dfr(models_functional,
+  ~ tibble(
+    x = xy[["x"]],
+    y_real = xy[["y"]],
+    y_estimated = .x[["fitted.values"]],
+    df = factor(.y, levels = df_of_interest)
+  )
+)
+
+xy[["generating_y"]] <- sin(xy[["x"]])
+
+base_plot <- xy %>% 
+  ggplot(aes(x = x)) +
+  geom_point(aes(y = y), colour = "blue", shape = 16, alpha = 0.1) +
+  geom_line(aes(y = generating_y), linetype = "dashed")
+
+base_plot +
+  geom_line(data = splines_predictions, aes(x = x, y = y_estimated), colour = "red") +
+  facet_wrap(~ df, ncol = 4) +
+  theme_minimal()
+```
+
+# Procedura quantitativa per definire il modello migliore
+
+## Preparazione dei fold per la cross-validation
+
+```{r cv-folds, message=FALSE, warning=FALSE}
+set.seed(123)
+xy_cv <- xy %>% mutate(fold = sample(rep(1:10, length.out = n())))
+```
+
+## Calcolo dell’RMSE per ogni df tramite 10-fold CV
+
+```{r cv-loop, message=FALSE, warning=FALSE}
+df_values <- 1:40
+
+cv_results <- map_dfr(df_values, function(d) {
+  
+  errors <- map_dbl(1:10, function(f) {
+    train_data <- xy_cv %>% filter(fold != f)
+    test_data  <- xy_cv %>% filter(fold == f)
+    
+    model <- lm(y ~ ns(x, df = d), data = train_data)
+    preds <- predict(model, newdata = test_data)
+    
+    sqrt(mean((test_data$y - preds)^2))
+  })
+  
+  tibble(df = d, mean_rmse = mean(errors))
+})
+```
+
+## Identificazione del miglior df
+
+```{r cv-bestdf, message=FALSE, warning=FALSE}
+best_df <- cv_results$df[which.min(cv_results$mean_rmse)]
+print(paste("Il miglior numero di gradi di libertà secondo la 10-fold CV è:", best_df))
+```
+
+## Visualizzazione dell’RMSE
+
+```{r cv-plot, message=FALSE, warning=FALSE}
+cv_results %>% 
+  ggplot(aes(df, mean_rmse)) +
+  geom_line() +
+  geom_point() +
+  theme_minimal()
+```
+
+## Conclusioni
+
+::: {style="text-align: justify;"}
+L'analisi visiva e la procedura quantitativa di validazione incrociata evidenziano che un modello con un numero di gradi di libertà compreso tra 5 e 10 sembra rappresenti una buona scelta, essendo in grado di ricostruire l'onda sinusoidale senza introdurre le oscillazioni spurie dovute al rumore. Con pochi df, il modello è rigido e non riesce a catturare la dinamica sinusoidale del fenomeno, presentando un bias dovuto all'underfitting. Con df \> 5, la spline diventa flessibile e si allinea al segnale. Dalla stima dei modelli naturali di spline si osserva che la capacità di adattamento aumenta progressivamente riducendo l’errore di addestramento. Tuttavia quando il numero di df diventa troppo alto si raggiunge l'overfitting perchè la funzione inizia a inseguire le oscillazioni del rumore.
+:::
