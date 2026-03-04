@@ -1,4 +1,4 @@
-# Biomedical Data Science & Machine Learning Portfolio
+# 🧬 Biomedical Data Science & Machine Learning Portfolio
 ### R code for Clinical Data Analysis, Machine Learning, and Text Mining applied to Pharma and Healthcare
 
 ## About Me
