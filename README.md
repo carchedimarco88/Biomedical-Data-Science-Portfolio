@@ -53,7 +53,7 @@ This repository contains a collection of R projects developed to solve practical
 
 ### 6. Explainable AI for Oncology: Breast Cancer Classification (06_breast_cancer_classification_cart.R)
 **Objective:** Developing a highly interpretable "white-box" predictive model for clinical decision support in oncology.
-Context:** Analyzed a biomedical dataset to classify breast tumor behavior (benign vs. malignant) based on morphological features.
+* **Context:** Analyzed a biomedical dataset to classify breast tumor behavior (benign vs. malignant) based on morphological features.
 * **Method:** Implemented a CART (Classification and Regression Trees) model optimized via 10-fold Cross-Validation to tune the Complexity Parameter (CP) and prevent overfitting.
 * **Outcome:** Delivered a fully transparent decision tree relying on key discriminant predictors (e.g., bare nuclei, cell size), evaluating clinical reliability through Balanced Accuracy and Positive Predictive Value.
 * *Keywords: Explainable AI, CART, Cross-Validation, Clinical Decision Support, Oncology.*
