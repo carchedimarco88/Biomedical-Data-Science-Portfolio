@@ -47,7 +47,7 @@ This repository contains a collection of R projects developed to solve practical
 **Objective:** Modeling complex biological relationships that represent non-linear patterns.
 * **Method:** Fitted B-Splines with varying degrees of freedom to capture non-linear signal in noisy data using functional programming (`purrr`).
 
-### 5. Wearable Device Data Analysis (`05_Wearable_Data_Correlation.R`)
+### 5. Regularized Regression Performance Comparison (`05_Regularized_Regression_Performance_Comparison.R`)
 **Objective:** Analyzing correlation patterns in physiological data from wearable sensors.
 * **Method:** Spearman correlation analysis on real-world activity tracker data to identify relationships between calories burned and movement intensity.
 
