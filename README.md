@@ -51,6 +51,20 @@ This repository contains a collection of R projects developed to solve practical
 **Objective:** Analyzing correlation patterns in physiological data from wearable sensors.
 * **Method:** Spearman correlation analysis on real-world activity tracker data to identify relationships between calories burned and movement intensity.
 
+### 6. Explainable AI for Oncology: Breast Cancer Classification (06_breast_cancer_classification_cart.R)
+**Objective:** Developing a highly interpretable "white-box" predictive model for clinical decision support in oncology.
+Context:** Analyzed a biomedical dataset to classify breast tumor behavior (benign vs. malignant) based on morphological features.
+* **Method:** Implemented a CART (Classification and Regression Trees) model optimized via 10-fold Cross-Validation to tune the Complexity Parameter (CP) and prevent overfitting.
+* **Outcome:** Delivered a fully transparent decision tree relying on key discriminant predictors (e.g., bare nuclei, cell size), evaluating clinical reliability through Balanced Accuracy and Positive Predictive Value.
+* **Keywords:** Explainable AI, CART, Cross-Validation, Clinical Decision Support, Oncology.
+
+### 7. Advanced Feature Selection & Ensemble Modeling (07_ensemble_modeling_randomforest_boruta.R)
+**Objective:** Enhancing predictive performance and model generalizability through ensemble learning and rigorous statistical feature selection.
+* **Context:** Evaluated multiple tree-based algorithms to predict continuous target variables while minimizing the generalization error.
+* **Method:** Developed and compared Conditional Inference Trees (CTREE), Bagging, and Random Forest models via 5-fold Cross-Validation. Integrated the Boruta algorithm to isolate statistically significant predictors and reduce dataset noise.
+* **Outcome:** Visualized and compared Train vs. Test RMSE across all model architectures to demonstrate the impact of Boruta-selected features on mitigating overfitting.
+* **Keywords:** Random Forest, Ensemble Learning, Boruta, Feature Selection, RMSE, Generalization.
+
 ---
 
 ### Contact
