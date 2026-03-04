@@ -1,5 +1,5 @@
 # Biomedical Data Science & Machine Learning Portfolio
-R code for Clinical Data Analysis, Machine Learning, and Text Mining applied to Pharmaceutical and Healthcare contexts
+### R code for Clinical Data Analysis, Machine Learning, and Text Mining applied to Pharmaceutical and Healthcare contexts
 
 ## About Me
 Hi, I'm **Foca Marco Carchedi**.
