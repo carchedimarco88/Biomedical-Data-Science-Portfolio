@@ -6,7 +6,6 @@
 # Date: 2026-03-04
 # ===========================================================================
 
-# Load required libraries for NLP, Text Mining, and Visualization
 library(tm)           # Core Text Mining framework
 library(wordcloud)    # Wordcloud generation
 library(RColorBrewer) # Color palettes
@@ -143,3 +142,4 @@ wordcloud(words = d$word,
 dev.off()
 
 cat("\nNLP pipeline completed successfully. Plots saved to the Working Directory.\n")
+
