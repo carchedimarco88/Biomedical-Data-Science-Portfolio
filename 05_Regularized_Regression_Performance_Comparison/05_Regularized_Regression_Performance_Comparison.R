@@ -1,22 +1,22 @@
-# ------------------------------------------------------------------------------
-# HOMEWORK WEEK-5 MODULO 2
-# CONFRONTO DELLE PERFORMANCE PREDITTIVE DEI MODELLI DI REGRESSIONE
-# Autore: Dott. Carchedi Foca Marco
-# Data: 15/02/2026
-# ------------------------------------------------------------------------------
-
+# ===========================================================================
+# MACHINE LEARNING & BIG DATA IN PRECISION MEDICINE 
+# Script: Predictive Performance Comparison of Regression Models
+# Method: Out-of-sample evaluation via RMSE
+# Author: Dr. Foca Marco Carchedi
+# Date: 2026-03-04
+# ===========================================================================
 library(tidyverse)
 library(glmnet)
 
-# Caricamento e Pulizia Dati
+# Data Loading and Cleaning
 wd <- read_csv("wd.txt", skip = 1) %>% 
   dplyr::select(-c(Date, `Activity Calories`)) %>% 
   rename(Calories = `Calories Burned`)
 
-# Split Train/Test (70% - 30%)
+# Train/Test Split (70% - 30%)
 # ------------------------------------------------------------------------------
-# NOTA METODOLOGICA: Eseguiamo lo split PRIMA di creare le matrici
-# per evitare qualsiasi forma di data leakage.
+# METHODOLOGICAL NOTE: We perform the split BEFORE creating the matrices
+# to prevent any form of data leakage.
 set.seed(123) 
 n <- nrow(wd)
 train_idx <- sample(1:n, n * 0.7)
@@ -24,7 +24,7 @@ train_idx <- sample(1:n, n * 0.7)
 wd_train <- wd[train_idx, ]
 wd_test  <- wd[-train_idx, ]
 
-# Addestramento Modelli
+# Model Training
 # ------------------------------------------------------------------------------
 
 # --- A. OLS (Ordinary Least Squares) ---
@@ -32,9 +32,9 @@ model_ols <- lm(Calories ~ ., data = wd_train)
 pred_ols  <- predict(model_ols, newdata = wd_test)
 rmse_ols  <- sqrt(mean((wd_test$Calories - pred_ols)^2))
 
-# --- Preparazione Matrici per GLMNET ---
-# Creiamo le matrici separatamente per training e test set
-# La funzione model.matrix trasforma i predittori in formato numerico/matrice
+# --- Matrix Preparation for GLMNET ---
+# We create the matrices separately for the training and test sets
+# The model.matrix function transforms the predictors into numerical/matrix format
 x_train <- model.matrix(Calories ~ ., wd_train)[, -1]
 y_train <- wd_train$Calories
 
@@ -54,47 +54,47 @@ pred_ridge <- predict(cv_ridge, s = best_lam_ridge, newx = x_test)
 rmse_ridge <- sqrt(mean((y_test - pred_ridge)^2))
 
 # --- D. ELASTIC NET (Alpha = 0.5 ) ---
-# Impostiamo alpha = 0.5 per un bilanciamento equo tra penalità L1 e L2.
+# We set alpha = 0.5 for an equal balance between L1 and L2 penalties.
 cv_enet <- cv.glmnet(x_train, y_train, alpha = 0.5)
 best_lam_enet <- cv_enet$lambda.min
 pred_enet <- predict(cv_enet, s = best_lam_enet, newx = x_test)
 rmse_enet <- sqrt(mean((y_test - pred_enet)^2))
 
-# VERIFICA DEI RISULTATI E COEFFICIENTI
+# RESULTS VERIFICATION AND COEFFICIENTS
 # ------------------------------------------------------------------------------
 
-# Mostriamo i coefficienti critici per vedere la selezione delle variabili
-print("--- CONFRONTO COEFFICIENTI: Steps e Distance ---")
+# We show the critical coefficients to see the variable selection
+print("--- COEFFICIENT COMPARISON: Steps and Distance ---")
 
-print("1. OLS (Notare Steps negativo e Distance enorme):")
+print("1. OLS (Note negative Steps and huge Distance):")
 print(coef(model_ols)[c("Steps", "Distance")])
 
 print("2. LASSO:")
 coef_lasso <- coef(cv_lasso, s = best_lam_lasso)
-# Estraiamo i coefficienti corrispondenti (gestendo i nomi con backtick se serve)
+# We extract the corresponding coefficients (handling names with backticks if needed)
 
 print(coef_lasso[rownames(coef_lasso) %in% c("Steps", "Distance"), , drop=FALSE])
 
-# Confronto Performance e Output
+# Performance Comparison and Output
 # ------------------------------------------------------------------------------
 df_res <- data.frame(
-  Modello = c("OLS", "Ridge", "LASSO", "Elastic Net"),
+  Model = c("OLS", "Ridge", "LASSO", "Elastic Net"),
   RMSE = c(rmse_ols, rmse_ridge, rmse_lasso, rmse_enet)
 )
 
-print("--- CLASSIFICA RMSE (Minore è meglio) ---")
+print("--- RMSE RANKING (Lower is better) ---")
 print(df_res[order(df_res$RMSE), ])
 
-# Grafico
-p <- ggplot(df_res, aes(x = reorder(Modello, RMSE), y = RMSE, fill = Modello)) +
+# Plot
+p <- ggplot(df_res, aes(x = reorder(Model, RMSE), y = RMSE, fill = Model)) +
   geom_bar(stat = "identity", width = 0.6) +
   geom_text(aes(label = round(RMSE, 2)), family = "sans", fontface = "bold", vjust = -0.5, size = 4) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
-  labs(title = "Confronto delle Performance di Generalizzazione",
-       subtitle = "Valutazione out-of-sample tramite RMSE",
-       y = "RMSE (Calorie - kcal)",
-       x = "Modelli di regressione",
-       caption = "Analisi e visualizzazione a cura del dott. Carchedi Foca Marco") +
+  labs(title = "Predictive Performance Comparison",
+       subtitle = "Out-of-sample evaluation via RMSE",
+       y = "RMSE (Calories - kcal)",
+       x = "Regression Models",
+       caption = "Analysis and visualization by Dr. Carchedi Foca Marco") +
   theme_minimal() +
   scale_fill_manual(values = c(
     "LASSO"       = "#0F243E", 
@@ -120,9 +120,9 @@ p <- ggplot(df_res, aes(x = reorder(Modello, RMSE), y = RMSE, fill = Modello)) +
   )
 
 print(p)
-ggsave("confronto_performance_dott._Carchedi_Foca_Marco.jpeg", plot = p, width = 8, height = 6)
+ggsave("performance_comparison_Dr_Carchedi_Foca_Marco.jpeg", plot = p, width = 8, height = 6)
 
-# I messaggi "Option grouped=FALSE enforced... since < 3 observations per fold" 
-# compaiono solo perché il dataset è piccolissimo (30 righe totali). 
-# Dividendo in training e test, rimangono pochi dati per la cross-validation.
-# È un avviso tecnico irrilevante per la validità concettuale dell'esercizio didattico.
+# The messages "Option grouped=FALSE enforced... since < 3 observations per fold" 
+# appear only because the dataset is very small (30 rows total). 
+# By splitting into training and test sets, few data points remain for cross-validation.
+# It is a technical warning irrelevant to the conceptual validity of the educational exercise.
