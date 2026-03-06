@@ -114,7 +114,7 @@ cat("The sum is:", final_sum, "\n")
 # --- Visualization and Export of the Exploratory Tree ---
 jpeg("Exploratory_Tree_Baseline_Carchedi.jpeg", width = 8, height = 6, units = 'in', res = 300)
 par(mar = rep(4, 4))
-plot(tree_model)
+plot(tree_model, type = "uniform")
 text(tree_model, cex = 0.8)
 title("Classification Tree for breast tumor behavior - Dr. Carchedi", line = 2)
 dev.off()
@@ -187,3 +187,4 @@ ppv_benign <- conf_matrix_rpart$byClass["Pos Pred Value"]
 cat("-----\n")
 cat("The Positive Predictive Value (benign) is:", round(ppv_benign, 4), "\n")
 cat("\nScript completed successfully. \nNote: Plots have been saved to the Working Directory.\n")
+
