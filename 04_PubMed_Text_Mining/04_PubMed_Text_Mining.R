@@ -6,16 +6,18 @@
 # Date: 2026-03-04
 # ===========================================================================
 
+library(SnowballC)
 library(tm)           # Core Text Mining framework
 library(wordcloud)    # Wordcloud generation
 library(RColorBrewer) # Color palettes
 library(igraph)       # Network analysis and co-occurrence graphs
 library(tidyverse)    # Data manipulation and ggplot2
+library(SnowballC)    # To perform stemming
 
 # ---------------------------------------------------------------------------
 # 1. DATA INGESTION
 # ---------------------------------------------------------------------------
-# [cite_start]Load dataset containing PubMed search results (Topic: Magnetic Hydrogels) [cite: 133]
+# Load dataset containing PubMed search results (Topic: Magnetic Hydrogels) 
 data_pubmed <- read.csv("csv-Magnetichy-set.csv", 
                         stringsAsFactors = FALSE,
                         fileEncoding = "UTF-8")
@@ -78,15 +80,21 @@ freq_plot <- d %>%
   ggplot(aes(x = reorder(word, freq), y = freq)) + 
   geom_bar(stat = 'identity', aes(fill = freq)) + 
   scale_fill_gradient(low = "skyblue", high = "#0F243E") +
-  coord_flip() + # Flip coordinates for label readability
+  coord_flip() + 
   labs(
     title = "Top Frequent Terms in Scientific Literature", 
     subtitle = "Corpus: PubMed Abstracts on Magnetic Hydrogels",
     x = "Stemmed Terms", 
     y = "Total Occurrences"
   ) +
-  theme_minimal() +
-  theme(legend.position = "none")
+  theme_minimal() + 
+  theme(
+    legend.position = "none",
+    plot.background = element_rect(fill = "white", color = NA),  
+    panel.background = element_rect(fill = "white", color = NA), 
+    panel.grid.minor = element_blank(),                          
+    axis.line = element_line(colour = "black")                   
+  )
 
 print(freq_plot)
 ggsave('01_word_frequencies_barplot.png', plot = freq_plot, width = 8, height = 6, dpi = 300) 
