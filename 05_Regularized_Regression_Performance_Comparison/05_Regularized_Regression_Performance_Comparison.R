@@ -9,9 +9,9 @@ library(tidyverse)
 library(glmnet)
 
 # Data Loading and Cleaning
-wd <- read_csv("wd.txt", skip = 1) %>% 
+wd <- read_csv(here('data', "wd.txt"), skip = 1) %>% 
   dplyr::select(-c(Date, `Activity Calories`)) %>% 
-  rename(Calories = `Calories Burned`)
+  dplyr::rename(Calories = `Calories Burned`)
 
 # Train/Test Split (70% - 30%)
 # ------------------------------------------------------------------------------
@@ -126,3 +126,4 @@ ggsave("performance_comparison_Dr_Carchedi_Foca_Marco.jpeg", plot = p, width = 8
 # appear only because the dataset is very small (30 rows total). 
 # By splitting into training and test sets, few data points remain for cross-validation.
 # It is a technical warning irrelevant to the conceptual validity of the educational exercise.
+
