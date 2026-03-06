@@ -18,7 +18,7 @@ library(SnowballC)    # To perform stemming
 # 1. DATA INGESTION
 # ---------------------------------------------------------------------------
 # Load dataset containing PubMed search results (Topic: Magnetic Hydrogels) 
-data_pubmed <- read.csv("csv-Magnetichy-set.csv", 
+data_pubmed <- read.csv(here('data',"csv-Magnetichy-set.csv"), 
                         stringsAsFactors = FALSE,
                         fileEncoding = "UTF-8")
 
@@ -150,4 +150,5 @@ wordcloud(words = d$word,
 dev.off()
 
 cat("\nNLP pipeline completed successfully. Plots saved to the Working Directory.\n")
+
 
