@@ -3,12 +3,12 @@
 
 ## About Me
 Hi, I'm **Foca Marco Carchedi**.
-I am a **Healthcare Analytics Engineer** and **Data Analyst** based in Italy, specializing in the intersection of healthcare and data science. My background combines clinical expertise (Pharmacy degree, clinical monitoring) with advanced technical skills in R, Machine Learning, and Big Data analysis.
+I am a **Healthcare Analytics Engineer** and **Data Analyst** based in Italy, specializing in the intersection of healthcare and data science. My background combines clinical expertise (Pharm.D) with technical skills in R, Machine Learning, and Big Data analysis.
 
 Currently, I am expanding my expertise through a Master's degree in *Machine Learning and Big Data in Precision Medicine and Biomedical Research* at the University of Padova.
 
 ## Project Overview
-This repository contains a collection of R projects developed to solve practical problems in the biomedical and pharmaceutical domains. The focus is on applying statistical learning methods to real-world clinical scenarios, from data imputation in Traumatic Brain Injury (TBI) studies to text mining of PubMed literature.
+This repository contains a collection of R projects developed to solve practical problems in the biomedical and pharmaceutical domains. The focus is on applying statistical learning methods to real-world clinical scenarios, from Breast Cancer Classification to data imputation in Traumatic Brain Injury (TBI) studies and text mining of PubMed literature.
 
 ## Tech Stack & Skills
 * **Languages:** R, SQL
